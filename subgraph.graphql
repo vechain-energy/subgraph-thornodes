@@ -1,0 +1,82 @@
+"""
+Account Information
+"""
+type VetDomainsNames @entity {
+  id: String!
+  address: Bytes!
+}
+
+type Account @entity {
+  id: Bytes!
+  name: String
+  asThorNode: ThorNodeContract
+  ThorNodes: [ThorNode!]! @derivedFrom(field: "owner")
+  ThorNodeoperatorOwner: [ThorNodeOperator!]! @derivedFrom(field: "owner")
+  ThorNodeoperatorOperator: [ThorNodeOperator!]! @derivedFrom(field: "operator")
+  ThorNodetransferFromEvent: [ThorNodeTransfer!]! @derivedFrom(field: "from")
+  ThorNodetransferToEvent: [ThorNodeTransfer!]! @derivedFrom(field: "to")
+  events: [Event!]! @derivedFrom(field: "emitter")
+}
+
+"""
+ThorNode Contract for ThorNodes
+"""
+type ThorNodeContract @entity(immutable: true) {
+  id: Bytes!
+  asAccount: Account!
+  supportsMetadata: Boolean
+  name: String
+  symbol: String
+  tokens: [ThorNode!]! @derivedFrom(field: "contract")
+  operators: [ThorNodeOperator!]! @derivedFrom(field: "contract")
+  transfers: [ThorNodeTransfer!]! @derivedFrom(field: "contract")
+}
+
+type ThorNode @entity {
+  id: ID!
+  contract: ThorNodeContract!
+  identifier: BigInt!
+  owner: Account!
+  approval: Account!
+  uri: String
+  transfers: [ThorNodeTransfer!]! @derivedFrom(field: "token")
+  level: Int!
+  isX: Boolean!
+}
+
+type ThorNodeOperator @entity {
+  id: ID!
+  contract: ThorNodeContract!
+  owner: Account!
+  operator: Account!
+  approved: Boolean!
+}
+
+type ThorNodeTransfer implements Event @entity(immutable: true) {
+  id: ID!
+  emitter: Account!
+  transaction: Transaction!
+  timestamp: BigInt!
+  contract: ThorNodeContract!
+  token: ThorNode!
+  from: Account!
+  to: Account!
+}
+
+
+"""
+Generic Types
+"""
+interface Event {
+  id: ID!
+  transaction: Transaction!
+  emitter: Account!
+  timestamp: BigInt!
+}
+
+type Transaction @entity(immutable: true) {
+  id: ID!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  events: [Event!]! @derivedFrom(field: "transaction")
+}

@@ -1,0 +1,84 @@
+specVersion: 1.2.0
+features:
+  - grafting
+  - ipfsOnEthereumContracts
+  - nonDeterministicIpfs
+schema:
+  file: subgraph.graphql
+dataSources:
+
+  # ERC721 Tokens
+  - kind: ethereum/contract
+    name: ERC721
+    network: mainnet
+    source:
+      address: "0xb81E9C5f9644Dec9e5e3Cac86b4461A222072302"
+      abi: IERC721
+      startBlock: 1314209
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - IERC721
+      abis:
+        - name: IERC721
+          file: ./node_modules/@openzeppelin/contracts/build/contracts/IERC721Metadata.json
+        - name: IThorNode
+          file: ./abis/thornode-tokenauction.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/erc721-handler.ts
+
+  # ThorNodes
+  - kind: ethereum/contract
+    name: ThorNode
+    network: mainnet
+    source:
+      address: "0xb81E9C5f9644Dec9e5e3Cac86b4461A222072302"
+      abi: IThorNode
+      startBlock: 1314209
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - IERC721
+      abis:
+        - name: IThorNode
+          file: ./abis/thornode-tokenauction.json
+      eventHandlers:
+        - event: LevelChanged(indexed uint256,indexed address,uint8,uint8)
+          handler: handleLevelChanged
+      file: ./src/ThorNode.ts
+
+  # Account: vet.domains names
+  - kind: ethereum/contract
+    name: vetDomains
+    network: mainnet
+    source:
+      startBlock: 17600000
+      abi: Resolver
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/vetDomains.ts
+      entities:
+        - AddrChanged
+        - NameChanged
+      abis:
+        - name: Resolver
+          file: ./abis/vetDomains-PublicResolver.json
+        - name: ResolveUtils
+          file: ./abis/vetDomains-ResolveUtils.json
+      eventHandlers:
+        - event: "AddrChanged(indexed bytes32,address)"
+          handler: handleAddrChanged
+        - event: "NameChanged(indexed bytes32,string)"
+          handler: handleNameChanged
