@@ -11,7 +11,7 @@ import {
   BigDecimal,
 } from "@graphprotocol/graph-ts";
 
-export class VetDomainsNames extends Entity {
+export class VetDomainsName extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -19,24 +19,24 @@ export class VetDomainsNames extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save VetDomainsNames entity without an ID");
+    assert(id != null, "Cannot save VetDomainsName entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        `Entities of type VetDomainsNames must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+        `Entities of type VetDomainsName must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
       );
-      store.set("VetDomainsNames", id.toString(), this);
+      store.set("VetDomainsName", id.toString(), this);
     }
   }
 
-  static loadInBlock(id: string): VetDomainsNames | null {
-    return changetype<VetDomainsNames | null>(
-      store.get_in_block("VetDomainsNames", id),
+  static loadInBlock(id: string): VetDomainsName | null {
+    return changetype<VetDomainsName | null>(
+      store.get_in_block("VetDomainsName", id),
     );
   }
 
-  static load(id: string): VetDomainsNames | null {
-    return changetype<VetDomainsNames | null>(store.get("VetDomainsNames", id));
+  static load(id: string): VetDomainsName | null {
+    return changetype<VetDomainsName | null>(store.get("VetDomainsName", id));
   }
 
   get id(): string {

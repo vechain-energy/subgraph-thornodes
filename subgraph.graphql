@@ -1,7 +1,7 @@
 """
 Account Information
 """
-type VetDomainsNames @entity {
+type VetDomainsName @entity {
   id: String!
   address: Bytes!
 }

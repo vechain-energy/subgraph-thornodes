@@ -3,8 +3,8 @@ import {
     NameChanged as NameChangedEvent,
 } from "../generated/vetDomains/Resolver";
 import { ResolveUtils } from '../generated/vetDomains/ResolveUtils'
-import { Account, VetDomainsNames } from '../generated/schema'
-import { Address, Bytes } from '@graphprotocol/graph-ts'
+import { Account, VetDomainsName } from '../generated/schema'
+import { Address } from '@graphprotocol/graph-ts'
 import { constants } from '@amxx/graphprotocol-utils'
 
 
@@ -66,11 +66,11 @@ function fetchAccount(address: Address): Account {
 }
 
 
-function fetchName(name: string): VetDomainsNames {
-    let domainsName = VetDomainsNames.load(name)
+function fetchName(name: string): VetDomainsName {
+    let domainsName = VetDomainsName.load(name)
 
     if (domainsName == null) {
-        domainsName = new VetDomainsNames(name)
+        domainsName = new VetDomainsName(name)
         domainsName.address = constants.ADDRESS_ZERO
         domainsName.save()
     }
