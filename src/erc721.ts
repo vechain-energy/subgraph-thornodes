@@ -71,7 +71,7 @@ export function fetchERC721(address: Address): ThorNodeContract | null {
 }
 
 export function fetchERC721Token(contract: ThorNodeContract, identifier: BigInt): ThorNode {
-    let id = contract.id.toHex().concat('/').concat(identifier.toHex())
+    let id = identifier.toString()
     let token = ThorNode.load(id)
 
     if (token == null) {

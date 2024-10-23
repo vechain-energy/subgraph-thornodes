@@ -6,7 +6,6 @@ features:
 schema:
   file: subgraph.graphql
 dataSources:
-
   # ERC721 Tokens
   - kind: ethereum/contract
     name: ERC721
@@ -55,6 +54,13 @@ dataSources:
       eventHandlers:
         - event: LevelChanged(indexed uint256,indexed address,uint8,uint8)
           handler: handleLevelChanged
+        - event: AuctionSuccessful(indexed uint256,indexed uint256,indexed address,address,uint256)
+          handler: handleAuctionSuccessful
+        - event: AuctionCreated(indexed uint256,indexed uint256,uint256,uint256,uint64)
+          handler: handleAuctionCreated
+        - event: AuctionCancelled(indexed uint256,indexed uint256)
+          handler: handleAuctionCanceled
+
       file: ./src/ThorNode.ts
 
   # Account: vet.domains names

@@ -418,14 +418,6 @@ export class ThorNode extends Entity {
     }
   }
 
-  get transfers(): ThorNodeTransferLoader {
-    return new ThorNodeTransferLoader(
-      "ThorNode",
-      this.get("id")!.toString(),
-      "transfers",
-    );
-  }
-
   get level(): i32 {
     let value = this.get("level");
     if (!value || value.kind == ValueKind.NULL) {
@@ -450,6 +442,30 @@ export class ThorNode extends Entity {
 
   set isX(value: boolean) {
     this.set("isX", Value.fromBoolean(value));
+  }
+
+  get transfers(): ThorNodeTransferLoader {
+    return new ThorNodeTransferLoader(
+      "ThorNode",
+      this.get("id")!.toString(),
+      "transfers",
+    );
+  }
+
+  get sales(): AuctionSuccessfulLoader {
+    return new AuctionSuccessfulLoader(
+      "ThorNode",
+      this.get("id")!.toString(),
+      "sales",
+    );
+  }
+
+  get auctions(): AuctionLoader {
+    return new AuctionLoader(
+      "ThorNode",
+      this.get("id")!.toString(),
+      "auctions",
+    );
   }
 }
 
@@ -752,6 +768,337 @@ export class Transaction extends Entity {
   }
 }
 
+export class AuctionSuccessful extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save AuctionSuccessful entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type AuctionSuccessful must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("AuctionSuccessful", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): AuctionSuccessful | null {
+    return changetype<AuctionSuccessful | null>(
+      store.get_in_block("AuctionSuccessful", id),
+    );
+  }
+
+  static load(id: string): AuctionSuccessful | null {
+    return changetype<AuctionSuccessful | null>(
+      store.get("AuctionSuccessful", id),
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get transaction(): string {
+    let value = this.get("transaction");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set transaction(value: string) {
+    this.set("transaction", Value.fromString(value));
+  }
+
+  get emitter(): Bytes {
+    let value = this.get("emitter");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set emitter(value: Bytes) {
+    this.set("emitter", Value.fromBytes(value));
+  }
+
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
+  }
+
+  get auctionId(): BigInt {
+    let value = this.get("auctionId");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set auctionId(value: BigInt) {
+    this.set("auctionId", Value.fromBigInt(value));
+  }
+
+  get token(): string {
+    let value = this.get("token");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set token(value: string) {
+    this.set("token", Value.fromString(value));
+  }
+
+  get seller(): Bytes {
+    let value = this.get("seller");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set seller(value: Bytes) {
+    this.set("seller", Value.fromBytes(value));
+  }
+
+  get winner(): Bytes {
+    let value = this.get("winner");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set winner(value: Bytes) {
+    this.set("winner", Value.fromBytes(value));
+  }
+
+  get finalPrice(): BigInt {
+    let value = this.get("finalPrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set finalPrice(value: BigInt) {
+    this.set("finalPrice", Value.fromBigInt(value));
+  }
+}
+
+export class Auction extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Auction entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Auction must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("Auction", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): Auction | null {
+    return changetype<Auction | null>(store.get_in_block("Auction", id));
+  }
+
+  static load(id: string): Auction | null {
+    return changetype<Auction | null>(store.get("Auction", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get transaction(): string {
+    let value = this.get("transaction");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set transaction(value: string) {
+    this.set("transaction", Value.fromString(value));
+  }
+
+  get emitter(): Bytes {
+    let value = this.get("emitter");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set emitter(value: Bytes) {
+    this.set("emitter", Value.fromBytes(value));
+  }
+
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
+  }
+
+  get auctionId(): BigInt {
+    let value = this.get("auctionId");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set auctionId(value: BigInt) {
+    this.set("auctionId", Value.fromBigInt(value));
+  }
+
+  get token(): string {
+    let value = this.get("token");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set token(value: string) {
+    this.set("token", Value.fromString(value));
+  }
+
+  get seller(): Bytes {
+    let value = this.get("seller");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set seller(value: Bytes) {
+    this.set("seller", Value.fromBytes(value));
+  }
+
+  get startingPrice(): BigInt {
+    let value = this.get("startingPrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set startingPrice(value: BigInt) {
+    this.set("startingPrice", Value.fromBigInt(value));
+  }
+
+  get endingPrice(): BigInt {
+    let value = this.get("endingPrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set endingPrice(value: BigInt) {
+    this.set("endingPrice", Value.fromBigInt(value));
+  }
+
+  get duration(): BigInt {
+    let value = this.get("duration");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set duration(value: BigInt) {
+    this.set("duration", Value.fromBigInt(value));
+  }
+
+  get cancelled(): boolean {
+    let value = this.get("cancelled");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set cancelled(value: boolean) {
+    this.set("cancelled", Value.fromBoolean(value));
+  }
+
+  get successful(): boolean {
+    let value = this.get("successful");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set successful(value: boolean) {
+    this.set("successful", Value.fromBoolean(value));
+  }
+}
+
 export class ThorNodeLoader extends Entity {
   _entity: string;
   _field: string;
@@ -803,5 +1150,41 @@ export class ThorNodeTransferLoader extends Entity {
   load(): ThorNodeTransfer[] {
     let value = store.loadRelated(this._entity, this._id, this._field);
     return changetype<ThorNodeTransfer[]>(value);
+  }
+}
+
+export class AuctionSuccessfulLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): AuctionSuccessful[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<AuctionSuccessful[]>(value);
+  }
+}
+
+export class AuctionLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): Auction[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<Auction[]>(value);
   }
 }
