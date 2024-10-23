@@ -110,6 +110,7 @@ type Auction implements Event @entity {
   startingPrice: BigInt!
   endingPrice: BigInt!
   duration: BigInt!
+  endTimestamp: BigInt!
   cancelled: Boolean!
   successful: Boolean!
 }

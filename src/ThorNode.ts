@@ -40,7 +40,7 @@ export function handleAuctionSuccessful(event: AuctionSuccessfulEvent): void {
 		token.owner = winner.id
 		token.save()
 
-		let auctionSuccess = new AuctionSuccessful([event.params._auctionId.toString(),'success'].join('/'))
+		let auctionSuccess = new AuctionSuccessful([event.params._auctionId.toString(), 'success'].join('/'))
 		auctionSuccess.transaction = transactions.log(event).id
 		auctionSuccess.timestamp = event.block.timestamp
 		auctionSuccess.emitter = event.address
@@ -74,6 +74,7 @@ export function handleAuctionCreated(event: AuctionCreatedEvent): void {
 		auction.startingPrice = event.params._startingPrice
 		auction.endingPrice = event.params._endingPrice
 		auction.duration = event.params._duration
+		auction.endTimestamp = event.block.timestamp.plus(event.params._duration)
 		auction.cancelled = false
 		auction.successful = false
 		auction.save()
@@ -81,9 +82,7 @@ export function handleAuctionCreated(event: AuctionCreatedEvent): void {
 }
 
 export function handleAuctionCanceled(event: AuctionCancelledEvent): void {
-	const auction = Auction.load(event.params._auctionId.toString())
-	if (auction) {
-		auction.cancelled = true
-		auction.save()
-	}
+	const auction = Auction.load(event.params._auctionId.toString())!
+	auction.cancelled = true
+	auction.save()
 }

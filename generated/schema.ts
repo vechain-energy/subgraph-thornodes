@@ -1072,6 +1072,19 @@ export class Auction extends Entity {
     this.set("duration", Value.fromBigInt(value));
   }
 
+  get endTimestamp(): BigInt {
+    let value = this.get("endTimestamp");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set endTimestamp(value: BigInt) {
+    this.set("endTimestamp", Value.fromBigInt(value));
+  }
+
   get cancelled(): boolean {
     let value = this.get("cancelled");
     if (!value || value.kind == ValueKind.NULL) {
