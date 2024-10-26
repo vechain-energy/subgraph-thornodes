@@ -902,8 +902,21 @@ export class AuctionSuccessful extends Entity {
     this.set("winner", Value.fromBytes(value));
   }
 
-  get finalPrice(): BigInt {
+  get finalPrice(): BigDecimal {
     let value = this.get("finalPrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set finalPrice(value: BigDecimal) {
+    this.set("finalPrice", Value.fromBigDecimal(value));
+  }
+
+  get finalPriceExact(): BigInt {
+    let value = this.get("finalPriceExact");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
@@ -911,8 +924,8 @@ export class AuctionSuccessful extends Entity {
     }
   }
 
-  set finalPrice(value: BigInt) {
-    this.set("finalPrice", Value.fromBigInt(value));
+  set finalPriceExact(value: BigInt) {
+    this.set("finalPriceExact", Value.fromBigInt(value));
   }
 }
 
@@ -1033,21 +1046,21 @@ export class Auction extends Entity {
     this.set("seller", Value.fromBytes(value));
   }
 
-  get startingPrice(): BigInt {
+  get startingPrice(): BigDecimal {
     let value = this.get("startingPrice");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBigInt();
+      return value.toBigDecimal();
     }
   }
 
-  set startingPrice(value: BigInt) {
-    this.set("startingPrice", Value.fromBigInt(value));
+  set startingPrice(value: BigDecimal) {
+    this.set("startingPrice", Value.fromBigDecimal(value));
   }
 
-  get endingPrice(): BigInt {
-    let value = this.get("endingPrice");
+  get startingPriceExact(): BigInt {
+    let value = this.get("startingPriceExact");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
@@ -1055,8 +1068,34 @@ export class Auction extends Entity {
     }
   }
 
-  set endingPrice(value: BigInt) {
-    this.set("endingPrice", Value.fromBigInt(value));
+  set startingPriceExact(value: BigInt) {
+    this.set("startingPriceExact", Value.fromBigInt(value));
+  }
+
+  get endingPrice(): BigDecimal {
+    let value = this.get("endingPrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set endingPrice(value: BigDecimal) {
+    this.set("endingPrice", Value.fromBigDecimal(value));
+  }
+
+  get endingPriceExact(): BigInt {
+    let value = this.get("endingPriceExact");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set endingPriceExact(value: BigInt) {
+    this.set("endingPriceExact", Value.fromBigInt(value));
   }
 
   get duration(): BigInt {

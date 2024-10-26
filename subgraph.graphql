@@ -96,7 +96,8 @@ type AuctionSuccessful implements Event @entity(immutable: true) {
   token: ThorNode!
   seller: Account!
   winner: Account!
-  finalPrice: BigInt!
+  finalPrice: BigDecimal!
+  finalPriceExact: BigInt!
 }
 
 type Auction implements Event @entity {
@@ -107,8 +108,10 @@ type Auction implements Event @entity {
   auctionId: BigInt!
   token: ThorNode!
   seller: Account!
-  startingPrice: BigInt!
-  endingPrice: BigInt!
+  startingPrice: BigDecimal!
+  startingPriceExact: BigInt!
+  endingPrice: BigDecimal!
+  endingPriceExact: BigInt!
   duration: BigInt!
   endTimestamp: BigInt!
   cancelled: Boolean!

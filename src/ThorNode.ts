@@ -15,7 +15,7 @@ import {
 } from './account'
 
 import {
-	events,
+	decimals,
 	transactions,
 } from '@amxx/graphprotocol-utils'
 
@@ -48,7 +48,8 @@ export function handleAuctionSuccessful(event: AuctionSuccessfulEvent): void {
 		auctionSuccess.token = token.id
 		auctionSuccess.seller = seller.id
 		auctionSuccess.winner = winner.id
-		auctionSuccess.finalPrice = event.params._finalPrice
+		auctionSuccess.finalPriceExact = event.params._finalPrice
+		auctionSuccess.finalPrice = decimals.toDecimals(auctionSuccess.finalPriceExact, 18)
 		auctionSuccess.save()
 
 		const auction = Auction.load(event.params._auctionId.toString())!
@@ -71,8 +72,10 @@ export function handleAuctionCreated(event: AuctionCreatedEvent): void {
 		auction.auctionId = event.params._auctionId
 		auction.token = token.id
 		auction.seller = seller.id
-		auction.startingPrice = event.params._startingPrice
-		auction.endingPrice = event.params._endingPrice
+		auction.startingPriceExact = event.params._startingPrice
+		auction.startingPrice = decimals.toDecimals(auction.startingPriceExact, 18)
+		auction.endingPriceExact = event.params._endingPrice
+		auction.endingPrice = decimals.toDecimals(auction.endingPriceExact, 18)
 		auction.duration = event.params._duration
 		auction.endTimestamp = event.block.timestamp.plus(event.params._duration)
 		auction.cancelled = false
